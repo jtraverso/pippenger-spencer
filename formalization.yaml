@@ -1,0 +1,138 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "The Pippenger–Spencer theorem on the chromatic index of hypergraphs"
+  description: >-
+    A Lean 4 / Mathlib formalization of the theorem of Pippenger and Spencer (1989): for r ≥ 2
+    and ε > 0 there are μ > 0 and D₀ such that every r-uniform hypergraph whose degrees lie in
+    [(1 − μ)D, D] and whose codegrees are at most μD, with D ≥ D₀, has chromatic index at most
+    (1 + ε)D. A second theorem gives an explicit polynomial error: if the maximum degree is at
+    most D, the codegrees are at most D^{1−δ} and there are at most exp(D^γ) edges, then the
+    chromatic index is at most D + D^{1−γ} for some γ = γ(r, δ) > 0. The proofs build on the
+    author's registered formalization of Ehard–Glock–Joos (PALOMAR-2026-10-17-000004): batches
+    of the trimmed Rödl nibble with the Lovász Local Lemma for the first theorem, and the
+    pseudorandom matching theorem (Ehard–Glock–Joos, Theorem 1.2) applied to an auxiliary colour
+    hypergraph for the second. Mathlib does not contain these results.
+  authors:
+    - "Juan Pablo Traverso Gianini"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Juan Pablo Traverso Gianini"
+
+classification:
+  arxiv: ["math.CO", "math.PR"]
+  msc2020: ["05C65", "05C15", "05C70", "05D40"]
+
+sources:
+  - title: "Asymptotic behavior of the chromatic index for hypergraphs"
+    authors:
+      - "Nicholas Pippenger"
+      - "Joel Spencer"
+    id: "doi:10.1016/0097-3165(89)90074-5"
+    type: "paper"
+    location: "Journal of Combinatorial Theory, Series A 51 (1989), 24–42"
+    relationship: "formalizes"
+    note: >-
+      The main theorem (chromatic index (1 + o(1))D for nearly regular uniform hypergraphs with
+      codegrees o(D)), with the quantifiers made explicit. The formal proof follows the
+      semi-random (nibble) method with the Lovász Local Lemma, but its details are not those of
+      the paper.
+    license: "all rights reserved"
+    author_endorsement: "n/a"
+  - title: "Pseudorandom hypergraph matchings"
+    authors:
+      - "Stefan Ehard"
+      - "Stefan Glock"
+      - "Felix Joos"
+    id: "doi:10.1017/S0963548320000280"
+    type: "paper"
+    location: "Combinatorics, Probability and Computing 29 (2020), 868–885; arXiv:1907.09946"
+    relationship: "background"
+    note: >-
+      Theorem 1.2, used for the polynomial-error version. Its formalization (the author's
+      PALOMAR-2026-10-17-000004, jtraverso/pseudorandom-hypergraph-matchings @ 3957f3c) is
+      reused unchanged: this package contains the 36 library modules the proofs need.
+    license: "all rights reserved"
+    author_endorsement: "not-contacted"
+
+status:
+  scope: >-
+    Both theorems are proved for finite vertex types. Only the upper bound on the chromatic
+    index is stated (the lower bound χ'(H) ≥ Δ(H) is immediate).
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "autonomous"
+      models: ["Aristotle (Harmonic)"]
+      framework: "Aristotle CLI"
+      tool_setup: >-
+        Produced the proofs (Aristotle project 2d91b76e) on top of the Ehard–Glock–Joos library on
+        the pinned toolchain, from the formal statements and a suggested proof route (auxiliary
+        colour hypergraph, per-vertex control, greedy colouring of the leftover).
+      cost:
+        wall_time: "about 1.5 hours"
+        spend_usd: "not tracked"
+        hardware: "API-only"
+      prompting_notes: "Formal statements and a natural-language proof route."
+    - method: "agent"
+      models: ["Claude Opus 5.5"]
+      framework: "Claude Code (Anthropic)"
+      tool_setup: >-
+        Statement design, audit of the return (statements, unchanged library files, headers, no
+        sorry or native_decide), extraction of the needed library modules and the Palomar
+        packaging, checked with `lake build`, `#print axioms` and a comparison of the elaborated
+        Challenge and Solution declarations (Lean v4.35.0-rc3, Mathlib
+        c55e6e786f49471c72fbddbec5415808896aec1e).
+      cost:
+        wall_time: "a few hours"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: "Natural-language instructions in Spanish, directed by the author."
+  spend_usd: "subscription-based"
+  notes: >-
+    The result was chosen by the human author; the Lean proofs are AI-generated and mechanically
+    verified (no `sorry`, axioms limited to propext, Classical.choice and Quot.sound, identical
+    elaborated types for the Challenge/Solution pair).
+
+fidelity:
+  divergences: >-
+    Hypergraphs are finite sets of finite subsets of a finite vertex type; the chromatic index is
+    expressed by the existence of a proper edge colouring c : Finset V → Fin m with m ≤ (1 + ε)D.
+    The asymptotic hypotheses "degrees (1 + o(1))D, codegrees o(D)" are written with explicit
+    quantifiers: for every ε there are μ and D₀ such that degrees in [(1 − μ)D, D] and codegrees
+    ≤ μD with D ≥ D₀ suffice. The minimum-degree hypothesis is kept as in the paper although the
+    proof does not use it. The polynomial-error theorem is not in Pippenger–Spencer; it is a
+    corollary of Ehard–Glock–Joos, Theorem 1.2, and carries that theorem's cap of exp(D^γ) on
+    the number of edges as an explicit hypothesis.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "Claude Opus 5.5 (AI agent in Claude Code, acting for the author)"
+  notes: >-
+    Agent review by Claude Opus 5.5, distinct from the mechanical verification: the agent
+    compared the statements with the paper, checked that the reused library modules are
+    byte-identical to the registered Ehard–Glock–Joos package, and confirmed by a local
+    `lake build`, `#print axioms` and a comparison of the fully elaborated Challenge and Solution
+    declarations that the proofs use no `sorry` and only propext, Classical.choice and
+    Quot.sound. The author directed the work. No independent human mathematical review has been
+    performed. The main theorem is that of the cited paper; no mathematical novelty is claimed.
+
+alignment:
+  namespace: "PippengerSpencer"
+  statements:
+    - source: "Pippenger–Spencer (1989), main theorem: χ'(H) ≤ (1 + o(1))D"
+      lean: "PippengerSpencer.pippenger_spencer"
+      module: "Challenge"
+      status: "proved"
+    - source: "Polynomial-error version via Ehard–Glock–Joos (2020), Theorem 1.2"
+      lean: "PippengerSpencer.chromatic_index_polynomial"
+      module: "Challenge"
+      status: "proved"
+
+acknowledgements: >-
+  Mathlib and the Lean community; Harmonic's Aristotle.
