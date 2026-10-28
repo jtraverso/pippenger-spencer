@@ -48,13 +48,22 @@ sources:
     id: "doi:10.1017/S0963548320000280"
     type: "paper"
     location: "Combinatorics, Probability and Computing 29 (2020), 868–885; arXiv:1907.09946"
-    relationship: "background"
+    relationship: "builds-on"
     note: >-
-      Theorem 1.2, used for the polynomial-error version. Its formalization (the author's
-      PALOMAR-2026-10-17-000004, jtraverso/pseudorandom-hypergraph-matchings @ 3957f3c) is
-      reused unchanged: this package contains the 36 library modules the proofs need.
+      Theorem 1.2 of this paper is applied to an auxiliary (r + 1)-uniform hypergraph to prove the
+      polynomial-error theorem `chromatic_index_polynomial`, which is therefore a corollary of it;
+      the trimmed nibble of its formalization is also used in the batches of `pippenger_spencer`.
     license: "all rights reserved"
     author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "PALOMAR-2026-10-17-000004 (jtraverso/pseudorandom-hypergraph-matchings @ 3957f3c)"
+    relationship: "builds-on"
+    note: >-
+      The same author's formalization of Ehard–Glock–Joos. Its 21 library modules used here
+      (`PseudorandomLib/*.lean`) are included byte-identically. The 15 modules of
+      `PseudorandomLib/PippengerSpencer/` are new in this entry and contain the proofs of
+      `pippenger_spencer` and `chromatic_index_polynomial`.
 
 status:
   scope: >-

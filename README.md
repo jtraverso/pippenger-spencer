@@ -25,16 +25,18 @@ Hypergraphs are finite sets of finite subsets of a finite vertex type `V`.
 | `pippenger_spencer` | For `r ≥ 2` and `ε > 0` there are `μ > 0` and `D₀` such that every `r`-uniform hypergraph with all degrees in `[(1 − μ) D, D]` and all codegrees `≤ μ D`, `D ≥ D₀`, has a proper edge colouring with at most `(1 + ε) D` colours |
 | `chromatic_index_polynomial` | For `r ≥ 2` and `0 < δ < 1` there are `γ > 0` and `D₀` such that every `r`-uniform hypergraph with maximum degree `≤ D`, codegrees `≤ D^{1−δ}` and at most `exp(D^γ)` edges, `D ≥ D₀`, has a proper edge colouring with at most `D + D^{1−γ}` colours |
 
-The lower bound `(1 − μ) D ≤ deg(v)` in `pippenger_spencer` is part of the classical statement
-but is not used by the proof, so the bound holds for every hypergraph of maximum degree at most
-`D` with codegrees at most `μ D`. The trivial lower bound `χ'(H) ≥ Δ(H)` is not restated.
+The theorem `pippenger_spencer` is stated, as in the paper, with the hypothesis that every degree
+lies in `[(1 − μ) D, D]`; the formalized statement requires that lower bound. The trivial lower
+bound `χ'(H) ≥ Δ(H)` is not restated.
 
 ## Proofs
 
 The proofs (in `PseudorandomLib/PippengerSpencer/`) build on the author's formalization of
 Ehard–Glock–Joos, *Pseudorandom hypergraph matchings* (Palomar PALOMAR-2026-10-17-000004,
 [jtraverso/pseudorandom-hypergraph-matchings](https://github.com/jtraverso/pseudorandom-hypergraph-matchings)).
-This repository contains only the part of that library they need (36 modules, all unchanged).
+This repository contains the 21 modules of that library the proofs need, unchanged
+(`PseudorandomLib/*.lean`, byte-identical to the registered commit 3957f3c), and the 15 new modules of
+`PseudorandomLib/PippengerSpencer/`, which contain the proofs of the two theorems of this entry.
 
 * `pippenger_spencer` colours in batches:
   * each batch runs independent copies of the library's trimmed Rödl nibble, written as a
